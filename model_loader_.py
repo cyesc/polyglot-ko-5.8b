@@ -28,4 +28,4 @@ with torch.no_grad():
     )
 
 print("🧠 모델 응답:")
-print(tokenizer.decode(output[0], skip_special_tokens=True))
+print(tokenizer.decode(output[0], skip_special_tokens=True).strip())

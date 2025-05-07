@@ -23,10 +23,12 @@ while True:
         output = model.generate(
             input_ids=inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
-            max_new_tokens=100,
+            max_new_tokens=300,
             temperature=0.7,
             top_p=0.9,
-            do_sample=True
+            do_sample=True,
+            eos_token_id=tokenizer.eos_token_id,
+            pad_token_id=tokenizer.eos_token_id
         )
 
     print("\n🧠 모델 응답:")

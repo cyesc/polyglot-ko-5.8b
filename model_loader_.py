@@ -19,10 +19,12 @@ inputs = tokenizer(instruction, return_tensors="pt").to(model.device)
 
 with torch.no_grad():
     output = model.generate(
-        **inputs,
+        input_ids=inputs["input_ids"],
+        attention_mask=inputs["attention_mask"],
         max_new_tokens=50,
         temperature=0.7,
-        top_p=0.95
+        top_p=0.95,
+        do_sample=True  # 이거 안 넣으면 경고 뜸 (sampling 관련)
     )
 
 print("🧠 모델 응답:")

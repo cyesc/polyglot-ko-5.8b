@@ -4,7 +4,7 @@ from peft import get_peft_model, LoraConfig, TaskType
 import torch
 import json
 
-#1. 데이터 불러오기
+# 1. 데이터 로드 함수
 def load_dataset_from_jsonl(path):
     with open(path, "r", encoding="utf-8") as f:
         data = [json.loads(line) for line in f]
@@ -12,23 +12,23 @@ def load_dataset_from_jsonl(path):
     outputs = [ex["output"] for ex in data]
     return Dataset.from_dict({"input": inputs, "output": outputs})
 
-#2. 토크나이즈 함수
+# 2. 토크나이즈 함수
 def tokenize(example):
     prompt = f"{example['input']}\n\n응답: {example['output']}"
     tokenized = tokenizer(prompt, truncation=True, padding="max_length", max_length=512)
     tokenized["labels"] = tokenized["input_ids"].copy()
     return tokenized
 
-#3. 모델/토크나이저 로드
+# 3. 모델 불러오기
 model_name = "EleutherAI/polyglot-ko-5.8b"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
-    device_map="auto",
-    torch_dtype=torch.float16
+    torch_dtype=torch.float16,
+    device_map="auto"
 )
 
-#4. LoRA 설정
+# 4. LoRA 설정
 peft_config = LoraConfig(
     r=8,
     lora_alpha=32,
@@ -38,11 +38,11 @@ peft_config = LoraConfig(
 )
 model = get_peft_model(model, peft_config)
 
-#5. 데이터 로딩 및 전처리
-dataset = load_dataset_from_jsonl("instruction_dataset.jsonl")
+# 5. 데이터 로딩 및 전처리
+dataset = load_dataset_from_jsonl("datasets/instruction_dataset_high_precision.jsonl")
 tokenized_dataset = dataset.map(tokenize)
 
-#6. 학습 설정
+# 6. 학습 설정
 training_args = TrainingArguments(
     output_dir="./outputs",
     per_device_train_batch_size=2,
@@ -56,7 +56,7 @@ training_args = TrainingArguments(
     evaluation_strategy="no"
 )
 
-#7. Trainer 정의 및 학습 시작
+# 7. Trainer 구성
 trainer = Trainer(
     model=model,
     args=training_args,
@@ -64,4 +64,5 @@ trainer = Trainer(
     data_collator=DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 )
 
+# 8. 학습 실행
 trainer.train()

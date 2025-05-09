@@ -1,6 +1,6 @@
 transformers==4.36.2
 datasets
-peft
+peft==0.10.0
 accelerate
 bitsandbytes
 scipy

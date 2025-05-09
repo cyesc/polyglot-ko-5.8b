@@ -54,7 +54,7 @@ training_args = TrainingArguments(
     fp16=False,
     bf16=True,
     logging_steps=10,
-    save_steps=100,
+    save_strategy="epoch",
     save_total_limit=2,
     evaluation_strategy="no"
 )

@@ -12,7 +12,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
     torch_dtype=torch.float32,  # ← NaN 방지용
     device_map="auto"
 )
-model = PeftModel.from_pretrained(base_model, "./outputs/checkpoint-2787")  # 경로는 정확히
+model = PeftModel.from_pretrained(base_model, "outputs/checkpoint-2787")  # 경로는 정확히
 
 # ✅ 3. 질의 루프
 while True:

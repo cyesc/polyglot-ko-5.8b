@@ -9,7 +9,7 @@ with open("datasets/books_merged.json", "r", encoding="utf-8") as f:
 print("✅ 추천 시스템 준비 완료!")
 
 while True:
-    user_input = input("\n📥 질문을 입력하세요 (종료하려면 'exit'): ")
+    user_input = input("\n질문을 입력하세요 : ")
     if user_input.lower() == "exit":
         break
 

@@ -2,31 +2,25 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 import torch
 
-# 모델 경로 설정
+# ✅ 1. 기본 모델과 tokenizer 로드
 base_model_name = "EleutherAI/polyglot-ko-5.8b"
-adapter_path = "output/checkpoint-2787"
-
-# 모델 로드
 tokenizer = AutoTokenizer.from_pretrained(base_model_name)
+
+# ✅ 2. base model + 튜닝된 adapter 로드
 base_model = AutoModelForCausalLM.from_pretrained(
     base_model_name,
-    torch_dtype=torch.float16,
+    torch_dtype=torch.float32,  # ← NaN 방지용
     device_map="auto"
 )
+model = PeftModel.from_pretrained(base_model, "./outputs/checkpoint-2787")  # 경로는 정확히
 
-model = PeftModel.from_pretrained(base_model, adapter_path)
-model.eval()
-
-print("✅ 튜닝된 모델 로드 완료!")
-
-# 터미널 인터랙션
+# ✅ 3. 질의 루프
 while True:
-    user_input = input("\n질문을 입력하세요 : ")
-    if user_input.lower().strip() == "exit":
+    instruction = input("\n📥 질문을 입력하세요 (종료하려면 'exit'): ")
+    if instruction.lower() == "exit":
         break
 
-    prompt = f"[질문] {user_input}\n[답변]"
-
+    prompt = f"[질문] {instruction}\n[답변]"
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 
     with torch.no_grad():
@@ -34,12 +28,12 @@ while True:
             input_ids=inputs["input_ids"],
             attention_mask=inputs["attention_mask"],
             max_new_tokens=300,
-            temperature=0.7,
-            top_p=0.9,
             do_sample=True,
+            temperature=0.7,
+            top_p=0.95,
             eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.eos_token_id
+            pad_token_id=tokenizer.eos_token_id  # 필수
         )
 
-    response = tokenizer.decode(output[0], skip_special_tokens=True).strip()
-    print("\n🧠 모델 응답:\n", response)
+    print("\n🧠 모델 응답:")
+    print(tokenizer.decode(output[0], skip_special_tokens=True).strip())

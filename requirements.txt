@@ -1,7 +1,7 @@
-transformers==4.30.2
+transformers==4.36.2
 datasets
 output
-peft==0.5.0
+peft==0.10.0
 accelerate==0.25.0
 bitsandbytes
 scipy

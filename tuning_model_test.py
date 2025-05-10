@@ -9,15 +9,15 @@ tokenizer = AutoTokenizer.from_pretrained(base_model_name)
 # ✅ 2. base model + 튜닝된 adapter 로드
 base_model = AutoModelForCausalLM.from_pretrained(
     base_model_name,
-    torch_dtype=torch.float32,  # ← NaN 방지용
+    torch_dtype=torch.float32,  # NaN 방지용
     device_map="auto"
 )
-model = PeftModel.from_pretrained(base_model, "outputs/checkpoint-2787")  # 경로는 정확히
+model = PeftModel.from_pretrained(base_model, "./output_v2/checkpoint_2787")  # ← 정확한 경로
 
-# ✅ 3. 질의 루프
+# ✅ 3. 실시간 질의 루프
 while True:
     instruction = input("\n📥 질문을 입력하세요 (종료하려면 'exit'): ")
-    if instruction.lower() == "exit":
+    if instruction.strip().lower() == "exit":
         break
 
     prompt = f"[질문] {instruction}\n[답변]"
@@ -32,7 +32,7 @@ while True:
             temperature=0.7,
             top_p=0.95,
             eos_token_id=tokenizer.eos_token_id,
-            pad_token_id=tokenizer.eos_token_id  # 필수
+            pad_token_id=tokenizer.eos_token_id
         )
 
     print("\n🧠 모델 응답:")

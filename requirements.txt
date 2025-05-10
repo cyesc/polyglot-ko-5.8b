@@ -10,3 +10,4 @@ sentence-transformers==2.2.2
 faiss-cpu==1.7.4
 pandas==2.2.2
 numpy==1.26.4
+huggingface_hub==0.15.1

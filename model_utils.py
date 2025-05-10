@@ -1,15 +1,22 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
+from peft import PeftModel, PeftConfig
 import torch
 
-model_path = "output/checkpoint-2787"
-tokenizer = AutoTokenizer.from_pretrained(model_path)
-model = AutoModelForCausalLM.from_pretrained(
-    model_path,
-    device_map="auto",
-    torch_dtype=torch.float16
+base_model = "EleutherAI/polyglot-ko-5.8b"
+adapter_path = "output/checkpoint-2787"
+
+# Load base model
+tokenizer = AutoTokenizer.from_pretrained(base_model)
+base = AutoModelForCausalLM.from_pretrained(
+    base_model,
+    torch_dtype=torch.float16,
+    device_map="auto"
 )
 
-print("✅ 튜닝된 Polyglot 모델 로드 완료!")
+# Load PEFT adapter
+model = PeftModel.from_pretrained(base, adapter_path)
+
+print("✅ 튜닝된 Polyglot 모델 + 어댑터 로드 완료!")
 
 def generate_response(prompt):
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)

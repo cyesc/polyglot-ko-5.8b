@@ -1,0 +1,4 @@
+transformers==4.36.2
+peft==0.7.1
+torch==2.2.2
+bitsandbytes==0.41.3  # fp16 대비 혹시 몰라 포함

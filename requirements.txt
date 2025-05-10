@@ -5,4 +5,8 @@ accelerate==0.25.0
 bitsandbytes
 scipy
 scikit-learn
-torch
+torch>=2.0.0
+sentence-transformers==2.2.2
+faiss-cpu==1.7.4
+pandas==2.2.2
+numpy==1.26.4

@@ -2,19 +2,19 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 import torch
 
-# ✅ 1. 기본 모델과 tokenizer 로드
+#1. 기본 모델과 tokenizer 로드
 base_model_name = "EleutherAI/polyglot-ko-5.8b"
 tokenizer = AutoTokenizer.from_pretrained(base_model_name)
 
-# ✅ 2. base model + 튜닝된 adapter 로드
+#2. base model + 튜닝된 adapter 로드
 base_model = AutoModelForCausalLM.from_pretrained(
     base_model_name,
     torch_dtype=torch.float32,  # NaN 방지용
     device_map="auto"
 )
-model = PeftModel.from_pretrained(base_model, "./output_v2/checkpoint_2787")  # ← 정확한 경로
+model = PeftModel.from_pretrained(base_model, "/root/output_v2/checkpoint_2787")  #vessl 내 경로
 
-# ✅ 3. 실시간 질의 루프
+#3. 실시간 질의 루프
 while True:
     instruction = input("\n📥 질문을 입력하세요 (종료하려면 'exit'): ")
     if instruction.strip().lower() == "exit":

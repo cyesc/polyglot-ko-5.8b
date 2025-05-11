@@ -1,6 +1,7 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
 from peft import get_peft_model, LoraConfig, TaskType
 from datasets import load_dataset  #수정
+from datasets import Dataset
 import torch
 import json
 

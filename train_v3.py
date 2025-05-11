@@ -39,7 +39,7 @@ peft_config = LoraConfig(
 model = get_peft_model(model, peft_config)
 
 # 5. Prepare dataset
-dataset = load_dataset_from_jsonl("datasets/instruction_dataset_high_precision.jsonl")
+dataset = load_dataset_from_jsonl("datasets/instruction_dataset_500_balanced.jsonl")
 tokenized_dataset = dataset.map(tokenize)
 
 # 6. Training arguments

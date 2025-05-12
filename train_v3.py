@@ -53,6 +53,7 @@ training_args = TrainingArguments(
     learning_rate=1e-5,
     fp16=True,
     bf16=False,
+    optim="adamw_torch_fused",
     logging_steps=10,
     save_strategy="epoch",
     save_total_limit=2,

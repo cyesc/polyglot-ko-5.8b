@@ -38,7 +38,7 @@ peft_config = LoraConfig(
     bias="none"
 )
 model = get_peft_model(model, peft_config)
-model.enable_input_require_grads()  #gradient_checkpointing 쓰면 꼭 필요함
+# model.enable_input_require_grads()  #gradient_checkpointing 쓰면 꼭 필요함
 
 # 5. Prepare dataset
 raw_data = load_dataset_from_jsonl("datasets/instruction_dataset_500_balanced.jsonl")
@@ -55,7 +55,7 @@ training_args = TrainingArguments(
     fp16=True,
     bf16=False,
     optim="adamw_torch_fused",
-    gradient_checkpointing=True,
+    # gradient_checkpointing=True,
     logging_steps=10,
     save_strategy="epoch",
     save_total_limit=2,

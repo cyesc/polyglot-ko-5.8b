@@ -54,6 +54,7 @@ training_args = TrainingArguments(
     fp16=True,
     bf16=False,
     optim="adamw_torch_fused",
+    gradient_checkpointing=True,
     logging_steps=10,
     save_strategy="epoch",
     save_total_limit=2,

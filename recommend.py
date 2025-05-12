@@ -45,7 +45,6 @@ def get_recommendations(user_input, books_df, theme, age_list):
 [책 정보]
 제목: {top_book['title']}
 요약: {top_book['summary']}
-태그: {top_book['tags']}
 테마: {top_book['theme']}
 대상 연령: {top_book['age']}
 [답변] 사용자의 요청에 따라 위 책을 추천하는 이유를 설명해주세요.

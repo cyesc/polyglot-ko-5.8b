@@ -16,7 +16,7 @@ def load_dataset_from_jsonl(path):
 def tokenize(example):
     prompt = f"{example['input']}\n\n응답: {example['output']}"
     tokenized = tokenizer(prompt, truncation=True, padding="max_length", max_length=512)
-    tokenized["labels"] = tokenized["input_ids"].clone()
+    tokenized["labels"] = tokenized["input_ids"][:]  # 리스트 복사
     return tokenized
 
 # 3. 모델 로딩

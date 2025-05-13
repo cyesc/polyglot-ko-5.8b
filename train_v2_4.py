@@ -1,6 +1,6 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, Trainer, TrainingArguments, DataCollatorForLanguageModeling
 from peft import get_peft_model, LoraConfig, TaskType
-from datasets import load_dataset  #수정
+from datasets import Dataset
 import torch
 import json
 
@@ -8,13 +8,13 @@ import json
 def load_dataset_from_jsonl(path):
     with open(path, "r", encoding="utf-8") as f:
         data = [json.loads(line) for line in f]
-    inputs = [ex["instruction"] + "\n\n" + ex["input"] for ex in data]
+    inputs = [ex["input"] for ex in data]    # ✅ instruction 제거됨
     outputs = [ex["output"] for ex in data]
     return {"input": inputs, "output": outputs}
 
 # 2. 토크나이즈 함수
 def tokenize(example):
-    prompt = f"{example['input']}\n\n응답: {example['output']}"
+    prompt = f"{example['input']}\n\n응답: {example['output']}"  # ✅ prompt 그대로 유지
     tokenized = tokenizer(prompt, truncation=True, padding="max_length", max_length=512)
     tokenized["labels"] = tokenized["input_ids"][:]  # 리스트 복사
     return tokenized
@@ -38,10 +38,9 @@ peft_config = LoraConfig(
 )
 model = get_peft_model(model, peft_config)
 
-# 5. 데이터 불러오기 및 가공
-raw_data = load_dataset_from_jsonl("datasets/instruction_dataset_500_balanced.jsonl")
-from datasets import Dataset
-dataset = Dataset.from_dict(raw_data)  #여기에만 Dataset 사용
+# 5. 데이터 로딩 및 가공
+raw_data = load_dataset_from_jsonl("datasets/instruction_dataset_500_balanced_no_instruction.jsonl")
+dataset = Dataset.from_dict(raw_data)
 tokenized_dataset = dataset.map(tokenize)
 
 # 6. 학습 설정

@@ -13,7 +13,7 @@ base_model = AutoModelForCausalLM.from_pretrained(
 )
 
 # ✅ 튜닝된 LoRA adapter 로드
-adapter_path = "./output_v2/checkpoint_0513_v1"
+adapter_path = "./output_v2/checkpoint_0513_v2"
 model = PeftModel.from_pretrained(base_model, adapter_path)
 
 # ✅ 인터랙티브 테스트 루프

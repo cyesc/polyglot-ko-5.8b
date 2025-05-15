@@ -39,7 +39,7 @@ peft_config = LoraConfig(
 model = get_peft_model(model, peft_config)
 
 # 5. 데이터 로딩 및 가공
-raw_data = load_dataset_from_jsonl("datasets/instruction_dataset_500_balanced_no_instruction.jsonl")
+raw_data = load_dataset_from_jsonl("datasets/instruction_dataset_high_precision_flatoutput_500.jsonl")
 dataset = Dataset.from_dict(raw_data)
 tokenized_dataset = dataset.map(tokenize)
 
